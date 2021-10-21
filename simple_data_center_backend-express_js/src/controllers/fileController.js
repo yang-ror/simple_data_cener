@@ -13,15 +13,26 @@ export const diskSpace = (req, res) => {
 
 export const addFile = (req, res) => {
     const file = req.file
+    var filePath = './public/files/'
     var filename = getFileName(file.originalname)
 
-    let stats = fs.lstatSync('./public/files/' + filename);
+    
+
+    let stats = fs.lstatSync(filePath + filename);
+    // console.log(stats.mtime)
+
+    // fs.utimesSync(filePath + filename, Date.now(), Date.now())
+    
+    // stats = fs.lstatSync(filePath + filename);
+    // console.log(stats.mtime)
+
+
     
     let newFile = {
         name: filename,
         path: '/files/' + filename,
         size: stats.size,
-        date: stats.mtime
+        date: stats.atime
     }
 
     res.json(newFile)
@@ -32,7 +43,7 @@ export const addFile = (req, res) => {
         let fileExt = filename.substring(filename.lastIndexOf('.'), filename.length)
 
         let i = 2
-        while (fs.existsSync('./public/files/' + filename)) {
+        while (fs.existsSync(filePath + filename)) {
             filename = filenameBeforeExt + '(' + (i++).toString() + ')' + fileExt
         }
         if(i == 3){

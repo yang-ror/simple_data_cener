@@ -79,7 +79,7 @@ export default {
         }
       }
       this.setFileList(this.files)
-      this.$forceUpdate()
+      // this.$forceUpdate()
     },
     deleteFile(filename){
       for(let i = 0; i < this.files.length; i++){

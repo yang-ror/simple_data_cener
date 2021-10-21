@@ -1,9 +1,9 @@
 <template>
   <div ref="thisPanel" :style="(currentPage!=1&&currentPage==numberOfPages)? `height:${panelHeight}px` : ''">
-    <AddLinkForm @newLink="newLink" />
+    <AddTodoForm @newTodo="newTodo" />
     <ul class="list-group">
-      <template v-for="(link, index) in linksInCurrentPage" :key="link._id">
-        <Link  v-if="!link.hide" :index="index+(currentPage-1)*itemPerPage" @editLink="editLink" @deleteThisLink="deleteLink" :id="link._id" :title="link.title" :url="link.url" />
+      <template v-for="(todo, index) in todosInCurrentPage" :key="todo._id">
+        <Todo v-if="!todo.hide" :index="index+(currentPage-1)*itemPerPage" @editTodo="editTodo" @deleteThisTodo="deleteTodo" :id="todo._id" :title="todo.title" :completed="todo.completed" />
       </template>
     </ul>
     <PageIndicator v-if="numberOfPages!=1" @pervious-page="goToPerviousPage" @next-page="goToNextPage" :numOfPages="numberOfPages" :currentPage="currentPage" />
@@ -12,15 +12,15 @@
 
 <script>
 import { mapState } from "vuex"
-import AddLinkForm from "../../ui/form/AddLinkForm.vue"
+import AddTodoForm from "../../ui/form/AddTodoForm.vue"
 import PageIndicator from "../../ui/PageIndicator.vue"
-import Link from "../../ui/items/Link.vue"
+import Todo from "../../ui/items/Todo.vue"
 export default {
   data(){
     return{
-      links: [],
-      linksToDisplay: [],
-      linksInCurrentPage: [],
+      todos: [],
+      todosToDisplay: [],
+      todosInCurrentPage: [],
       itemPerPage: 20,
       currentPage: 1,
       numberOfPages: 1,
@@ -28,8 +28,8 @@ export default {
     }
   },
   components:{
-    Link,
-    AddLinkForm,
+    Todo,
+    AddTodoForm,
     PageIndicator
   },
   computed:{
@@ -37,15 +37,15 @@ export default {
   },
   methods:{
     setPage(){
-      if(this.linksToDisplay.length < this.itemPerPage){
+      if(this.todosToDisplay.length < this.itemPerPage){
         this.numberOfPages = 1
-        this.linksInCurrentPage = this.linksToDisplay
+        this.todosInCurrentPage = this.todosToDisplay
       }
       else{
-        this.numberOfPages = parseInt(this.linksToDisplay.length / this.itemPerPage) + 1
-        this.linksInCurrentPage = this.linksToDisplay.slice((this.currentPage-1)*this.itemPerPage, 
+        this.numberOfPages = parseInt(this.todosToDisplay.length / this.itemPerPage) + 1
+        this.todosInCurrentPage = this.todosToDisplay.slice((this.currentPage-1)*this.itemPerPage, 
           this.currentPage < this.numberOfPages ? 
-            (this.currentPage)*this.itemPerPage : this.linksToDisplay.length-1
+            (this.currentPage)*this.itemPerPage : this.todosToDisplay.length-1
         )
       }
     },
@@ -63,26 +63,25 @@ export default {
         this.$forceUpdate()
       }
     },
-    newLink(newlLink){
-      this.links.unshift(newlLink)
+    newTodo(newlTodo){
+      this.todos.unshift(newlTodo)
       this.setPage()
       this.$forceUpdate()
     },
-    deleteLink(id){
-      // this.links.filter(link => link.id != id)
-      for(let i = 0; i < this.links.length; i++){
-        if(this.links[i]._id == id){
-          this.links.splice(i, 1)
+    deleteTodo(id){
+      for(let i = 0; i < this.todos.length; i++){
+        if(this.todos[i]._id == id){
+          this.todos.splice(i, 1)
           break
         }
       }
       this.setPage()
       this.$forceUpdate()
     },
-    editLink(newLink){
-      for(let i = 0; i < this.links.length; i++){
-        if(this.links[i]._id == newLink._id){
-          this.links[i] = newLink
+    editTodo(newTodo){
+      for(let i = 0; i < this.todos.length; i++){
+        if(this.todos[i]._id == newTodo._id){
+          this.todos[i] = newTodo
           break
         }
       }
@@ -90,8 +89,8 @@ export default {
   },
   watch:{
     itemFilter(){
-      this.linksToDisplay = this.itemFilter == "" ? this.links : this.links.filter(
-        link => link.url.toLowerCase().includes(this.itemFilter.toLowerCase())
+      this.todosToDisplay = this.itemFilter == "" ? this.todos : this.todos.filter(
+        todo => todo.title.toLowerCase().includes(this.itemFilter.toLowerCase())
       )
       this.currentPage = 1
       this.setPage()
@@ -99,11 +98,11 @@ export default {
     }
   },
   async created(){
-    const res = await fetch('/link')
+    const res = await fetch('/todo')
     const results = await res.json()
-    this.links = results
-    this.links.reverse()
-    this.linksToDisplay = this.links
+    this.todos = results
+    this.todos.reverse()
+    this.todosToDisplay = this.todos
     this.setPage()
   },
   mounted(){

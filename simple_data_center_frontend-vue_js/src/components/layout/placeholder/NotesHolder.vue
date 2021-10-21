@@ -75,7 +75,7 @@ export default {
           break
         }
       }
-      this.$forceUpdate()
+      // this.$forceUpdate()
     },
     deleteNote(id){
       for(let i = 0; i < this.notes.length; i++){

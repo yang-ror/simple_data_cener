@@ -4,8 +4,8 @@
       <!-- <div class="col">
         <Media type="upload" />
       </div> -->
-      <div v-for="(media, index) in mediasInCurrentPage" :key="media.index" class="col">
-        <Media v-if="!media.hide" :index="index+(currentPage-1)*itemPerPage" @deleteThisFile="deleteFile" :name="media.name" :type="media.type" :url="media.path" />
+      <div v-for="media in mediasInCurrentPage" :key="media.fileIndex" class="col">
+        <Media v-if="!media.hide" :index="media.fileIndex" @deleteThisFile="deleteFile" :name="media.name" :type="media.type" :url="media.path" />
       </div>
     </div>
     <PageIndicator v-if="numberOfPages!=1" @pervious-page="goToPerviousPage" @next-page="goToNextPage" :numOfPages="numberOfPages" :currentPage="currentPage" />
@@ -77,12 +77,14 @@ export default {
     },
     readFileList(){
       this.medias = []
+      var i = 0
       for(let file of this.fileList){
         if(this.isImage(file.name)){
           let newMedia = {
             name: file.name,
             path: file.path,
-            type: 'image'
+            type: 'image',
+            fileIndex: i
           }
           this.medias.push(newMedia)
         }
@@ -90,7 +92,8 @@ export default {
           let newMedia = {
             name: file.name,
             path: file.path,
-            type: 'audio'
+            type: 'audio',
+            fileIndex: i
           }
           this.medias.push(newMedia)
         }
@@ -98,16 +101,18 @@ export default {
           let newMedia = {
             name: file.name,
             path: file.path,
-            type: 'video'
+            type: 'video',
+            fileIndex: i
           }
           this.medias.push(newMedia)
         }
+        i++
       }
     },
     isImage(filename){
       var imgFormats = [".png", ".jpg", ".jpeg", ".gif", ".apng", ".svg", ".bmp"]
       for(let imgFormat of imgFormats){
-        if(filename.endsWith(imgFormat)){
+        if(filename.toLowerCase().endsWith(imgFormat)){
           return true
         }
       }
@@ -116,7 +121,7 @@ export default {
     isAudio(filename){
       var audFormats = [".mp3", ".wav", ".ogg"]
       for(let audFormat of audFormats){
-        if(filename.endsWith(audFormat)){
+        if(filename.toLowerCase().endsWith(audFormat)){
           return true
         }
       }
@@ -125,7 +130,7 @@ export default {
     isVideo(filename){
       var vidFormats = [".mp4", ".webm"]
       for(let vidFormat of vidFormats){
-        if(filename.endsWith(vidFormat)){
+        if(filename.toLowerCase().endsWith(vidFormat)){
           return true
         }
       }
@@ -147,11 +152,6 @@ export default {
       this.setPage()
       this.$forceUpdate()
     }
-  },
-  created(){
-    // this.readFileList()
-    // this.mediasToDisplay = this.medias
-    // this.setPage()
   },
   mounted(){
     this.panelHeight = this.$refs.thisPanel.clientHeight

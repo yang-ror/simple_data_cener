@@ -1,6 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
 
+import todoRoutes from './src/routes/todoRoute'
 import fileRoutes from './src/routes/fileRoute'
 import linkRoutes from './src/routes/linkRoute'
 import noteRoutes from './src/routes/noteRoute'
@@ -19,6 +20,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static('public'));
 
+todoRoutes(app);
 fileRoutes(app);
 linkRoutes(app);
 noteRoutes(app);

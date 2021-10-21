@@ -100,7 +100,7 @@ export default {
 .media-name{
     color: #42b883;
     margin-left: 5px;
-    width: 170px;
+    width: 165px;
     white-space: nowrap;
 }
 .upload-icon{

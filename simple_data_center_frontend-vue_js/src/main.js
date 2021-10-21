@@ -41,9 +41,10 @@ const store = createStore({
                 bright: "#333333",
                 disabled: "#777777"
             },
-            panels: ['Files', 'Media', 'Links', 'Notes'],
+            panels: ['Todo', 'Files', 'Media', 'Links', 'Notes'],
             itemFilter: "",
             showCleanBtn:{
+                todo: false,
                 files: false,
                 media: false,
                 links: false,
@@ -106,6 +107,9 @@ const store = createStore({
         },
         toogleClean(state, payload){
             switch(payload){
+                case 'Todo':
+                    state.showCleanBtn.todo = !state.showCleanBtn.todo
+                    break
                 case 'Files':
                     state.showCleanBtn.files = !state.showCleanBtn.files
                     break

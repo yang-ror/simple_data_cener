@@ -7,6 +7,7 @@
   <br>
   <ProgressBar :percentage="diskPercentage" :label="diskLabel" />
   <div class="button-div">
+    <Button text="Todo" />
     <Button text="Files" />
     <Button text="Media" />
     <Button text="Links" />

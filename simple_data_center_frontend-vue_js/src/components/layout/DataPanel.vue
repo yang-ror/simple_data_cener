@@ -8,6 +8,7 @@
     <h2 class="panel-title title-elements">{{ title }}</h2>
     <CleanBtn class="clean-btn title-elements" :type="title" />
   </div>
+  <TodoHolder v-if="title==='Todo'" />
   <FilesHolder v-if="title==='Files'" />
   <MediaHolder v-if="title==='Media'" />
   <LinksHolder v-if="title==='Links'" />
@@ -19,6 +20,7 @@
 <script>
 import { mapState } from "vuex"
 import CleanBtn from "../ui/CleanBtn.vue"
+import TodoHolder from "./placeholder/TodoHolder.vue"
 import FilesHolder from "./placeholder/FilesHolder.vue"
 import MediaHolder from "./placeholder/MediaHolder.vue"
 import LinksHolder from "./placeholder/LinksHolder.vue"
@@ -30,10 +32,11 @@ export default {
     },
     components:{
         CleanBtn,
+        TodoHolder,
         FilesHolder,
         MediaHolder,
         LinksHolder,
-        NotesHolder
+        NotesHolder,
     },
     computed:{
         ...mapState(["showCleanBtn","colors"])
