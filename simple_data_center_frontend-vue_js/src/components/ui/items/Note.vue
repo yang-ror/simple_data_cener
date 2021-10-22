@@ -8,7 +8,9 @@
             <div class="note-btn-holder" @click="copyToClipBoard(content)"><CopyIcon class="note-btn" /></div>
         </div>
         <div v-if="editingMode" class="note-btn-group" :style="{color: colors.primary}">
-            <div class="note-btn-holder" @click="submitEditing"><SubmitIcon class="note-btn" /></div>
+            
+            <div v-if="id==0" class="note-btn-holder" @click="submitEditing"><NewNoteIcon class="note-btn" /></div>
+            <div v-if="id!=0" class="note-btn-holder" @click="submitEditing"><SubmitIcon class="note-btn" /></div>
             <!-- <div class="note-btn-holder" @click="toggleNoteBox"><ViewInBoxIcon class="note-btn" /></div> -->
             <div v-if="id!=0" class="note-btn-holder" @click="cancelEditing"><CancelIcon class="note-btn" /></div>
         </div>

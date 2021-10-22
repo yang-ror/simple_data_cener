@@ -1,10 +1,9 @@
 <template>
-<li class="list-group-item" :style="{background: colors.bright, color: colors.text}">
+<div>
     <input class="form-check-input" type="checkbox" v-model="isCompleted" @click="toogleComplete">
-    {{index+1}}. 
-    <label v-if="!editingMode && !isCompleted" target='_blank' :style="{color: colors.primary}">{{title}}</label>
-    <s v-if="!editingMode && isCompleted" target='_blank' :style="{color: colors.primary}">{{title}}</s>
-    <input v-if="editingMode" v-model="todoTitle" :style="{color: colors.text, background: colors.background}" class="rename-input">
+    {{index}}.
+    <label v-if="!editingMode" :class="isCompleted ? 'completed-todo' : ''" :style="{color: colors.primary, textDecorationColor: colors.secondary}">{{title}}</label>
+    <input v-if="editingMode" @keyup.enter="submitEditing" v-model="todoTitle" :style="{color: colors.text, background: colors.background}" class="rename-input">
     <div v-if="!editingMode && !showCleanBtn.todo" class="todo-btn-group" :style="{color: colors.primary}">
         <div class="todo-btn-holder" @click="startEditing"><RenameIcon class="todo-btn" /></div>
     </div>
@@ -15,7 +14,8 @@
     <div v-if="showCleanBtn.todo" class="todo-btn-group" :style="{color: 'white'}">
         <div class="todo-btn-holder bg-danger bg-gradient" @click="deleteTodo"><DeleteIcon class="todo-btn" /></div>
     </div>
-</li>
+</div>
+
 </template>
 
 <script>
@@ -68,8 +68,9 @@ export default {
         },
         async toogleComplete(){
             var newTodo = {
-                title: this.title,
-                completed: !this.completed
+                // title: this.title,
+                completed: !this.completed,
+                timeOfStateChange: Date.now()
             }
             const res = await fetch('/todo/' + this.id, {
                 method: 'PUT',
@@ -121,10 +122,20 @@ export default {
 .todo-btn-holder:active{
     background-color: rgba(163, 163, 163, 0.5);
 }
+.todo-index{
+    margin-left: 10px;
+    margin-right: 5px;
+}
+.todo-title{
+    width: 50%;
+}
 .rename-input{
     border-color: #42b883;
     border-radius: 5px;
     width: 50%;
     min-width: 208px;
+}
+.completed-todo{
+    text-decoration: line-through;
 }
 </style>

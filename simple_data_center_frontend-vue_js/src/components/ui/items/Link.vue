@@ -1,8 +1,9 @@
 <template>
-<li class="list-group-item" :style="{background: colors.bright, color: colors.text}">
+
+<div>
     {{index+1}}. 
     <a v-if="!editingMode" :href="url" target='_blank' :style="{color: colors.primary}">{{title}}</a>
-    <input v-if="editingMode" v-model="linkTitle" :style="{color: colors.text, background: colors.background}" class="rename-input">
+    <input v-if="editingMode" @keyup.enter="submitEditing" v-model="linkTitle" :style="{color: colors.text, background: colors.background}" class="rename-input">
     <div v-if="!editingMode && !showCleanBtn.links" class="link-btn-group" :style="{color: colors.primary}">
         <div class="link-btn-holder" @click="startEditing"><RenameIcon class="link-btn" /></div>
         <div class="link-btn-holder" @click="copyToClipBoard(url)"><CopyIcon class="link-btn" /></div>
@@ -14,7 +15,8 @@
     <div v-if="showCleanBtn.links" class="link-btn-group" :style="{color: 'white'}">
         <div class="link-btn-holder bg-danger bg-gradient" @click="deleteLink"><DeleteIcon class="link-btn" /></div>
     </div>
-</li>
+</div>
+
 </template>
 
 <script>

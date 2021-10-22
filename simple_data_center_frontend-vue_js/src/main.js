@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import { createStore } from "vuex"
 import { 
-    BIconGearFill,
+    BIconBookmarkCheckFill,
     BIconMoonStarsFill, 
     BIconSunFill, 
     BIconFolderFill,
@@ -20,7 +20,8 @@ import {
     BIconCaretLeftFill,
     BIconCaretRightFill,
     BIconTrash,
-    BIconXCircle
+    BIconXCircle,
+    BIconPlusLg
 } from 'bootstrap-icons-vue'
 import 'bootstrap'
 import 'animate.css'
@@ -139,7 +140,7 @@ const app = createApp(App)
 
 app.use(store)
 
-app.component('SettingIcon', BIconGearFill)
+app.component('TodoIcon', BIconBookmarkCheckFill)
 app.component('DarkModeIcon', BIconMoonStarsFill)
 app.component('LightModeIcon', BIconSunFill)
 app.component('FolderIcon', BIconFolderFill)
@@ -159,5 +160,6 @@ app.component('LeftPageIcon', BIconCaretLeftFill)
 app.component('RightPageIcon', BIconCaretRightFill)
 app.component('TrashIcon', BIconTrash)
 app.component('DeleteIcon', BIconXCircle)
+app.component('NewNoteIcon', BIconPlusLg)
 
 app.mount('#app')

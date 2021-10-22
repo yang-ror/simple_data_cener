@@ -1,6 +1,7 @@
 <template>
 <div >
   <div calss="title-holder">
+    <TodoIcon v-if="title==='Todo'" class="file-icon title-elements" :style="{color: colors.primary}" />
     <FolderIcon v-if="title==='Files'" class="file-icon title-elements" :style="{color: colors.primary}" />
     <MediaIcon v-if="title==='Media'" class="file-icon title-elements" :style="{color: colors.primary}" />
     <LinkIcon v-if="title==='Links'" class="file-icon title-elements" :style="{color: colors.primary}" />

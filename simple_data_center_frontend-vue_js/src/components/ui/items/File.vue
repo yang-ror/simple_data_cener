@@ -1,8 +1,8 @@
 <template>
-<li class="list-group-item" :style="{background: colors.bright, color: colors.text}">
+<div>
     {{index+1}}. 
     <a v-if="!editingMode" :href="url" target='_blank' :style="{color: colors.primary}">{{name}}</a>
-    <input v-if="editingMode" v-model="filename" :style="{color: colors.text, background: colors.background}" class="rename-input">
+    <input v-if="editingMode" @keyup.enter="submitEditing" v-model="filename" :style="{color: colors.text, background: colors.background}" class="rename-input">
     <div v-if="!editingMode && !showCleanBtn.files" class="file-btn-group" :style="{color: colors.primary}">
         <!-- <div class="file-btn-holder"><ShowInMediaIcon class="file-btn" /></div> -->
         <div class="file-btn-holder" @click="startEditing"><RenameIcon class="file-btn" /></div>
@@ -15,7 +15,7 @@
     <div v-if="showCleanBtn.files" class="file-btn-group" :style="{color: 'white'}">
         <div class="file-btn-holder bg-danger bg-gradient" @click="deleteFile"><DeleteIcon class="file-btn" /></div>
     </div>
-</li>
+</div>
 </template>
 
 <script>

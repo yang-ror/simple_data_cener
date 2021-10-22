@@ -2,9 +2,9 @@
   <div ref="thisPanel" :style="(currentPage!=1&&currentPage==numberOfPages)? `height:${panelHeight}px` : ''">
     <AddLinkForm @newLink="newLink" />
     <ul class="list-group">
-      <template v-for="(link, index) in linksInCurrentPage" :key="link._id">
+      <li class="list-group-item" v-for="(link, index) in linksInCurrentPage" :key="link._id" :style="{background: colors.bright, color: colors.text}">
         <Link  v-if="!link.hide" :index="index+(currentPage-1)*itemPerPage" @editLink="editLink" @deleteThisLink="deleteLink" :id="link._id" :title="link.title" :url="link.url" />
-      </template>
+      </li>
     </ul>
     <PageIndicator v-if="numberOfPages!=1" @pervious-page="goToPerviousPage" @next-page="goToNextPage" :numOfPages="numberOfPages" :currentPage="currentPage" />
   </div>
@@ -33,7 +33,7 @@ export default {
     PageIndicator
   },
   computed:{
-    ...mapState(["itemFilter"])
+    ...mapState(["itemFilter", "colors"])
   },
   methods:{
     setPage(){

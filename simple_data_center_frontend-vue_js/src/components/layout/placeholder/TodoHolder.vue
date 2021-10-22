@@ -2,9 +2,9 @@
   <div ref="thisPanel" :style="(currentPage!=1&&currentPage==numberOfPages)? `height:${panelHeight}px` : ''">
     <AddTodoForm @newTodo="newTodo" />
     <ul class="list-group">
-      <template v-for="(todo, index) in todosInCurrentPage" :key="todo._id">
-        <Todo v-if="!todo.hide" :index="index+(currentPage-1)*itemPerPage" @editTodo="editTodo" @deleteThisTodo="deleteTodo" :id="todo._id" :title="todo.title" :completed="todo.completed" />
-      </template>
+      <li class="list-group-item" v-for="todo in todosInCurrentPage" :key="todo._id" :style="{background: colors.bright, color: colors.text}">
+        <Todo v-if="!todo.hide" :index="todo.index" @editTodo="editTodo" @deleteThisTodo="deleteTodo" :id="todo._id" :title="todo.title" :completed="todo.completed" />
+      </li>
     </ul>
     <PageIndicator v-if="numberOfPages!=1" @pervious-page="goToPerviousPage" @next-page="goToNextPage" :numOfPages="numberOfPages" :currentPage="currentPage" />
   </div>
@@ -33,7 +33,7 @@ export default {
     PageIndicator
   },
   computed:{
-    ...mapState(["itemFilter"])
+    ...mapState(["itemFilter", "colors"])
   },
   methods:{
     setPage(){
@@ -64,7 +64,9 @@ export default {
       }
     },
     newTodo(newlTodo){
-      this.todos.unshift(newlTodo)
+      this.todos.push(newlTodo)
+      this.sortTodoList()
+      this.todosToDisplay = this.todos
       this.setPage()
       this.$forceUpdate()
     },
@@ -85,6 +87,29 @@ export default {
           break
         }
       }
+      this.sortTodoList()
+      this.todosToDisplay = this.todos
+      this.setPage()
+      this.$forceUpdate()
+    },
+    sortTodoList(){
+      this.todos.sort((a, b) => (a.timeOfStateChange < b.timeOfStateChange) ? 1 : ((b.timeOfStateChange < a.timeOfStateChange) ? -1 : 0))
+
+      var unfinishedList = []
+      var completedList = []
+      var indexOfUnfinishedTodo = 1;
+      var indexOfFinishedTodo = 1;
+      for(let todo of this.todos){
+        if(!todo.completed){
+          todo.index = indexOfUnfinishedTodo++
+          unfinishedList.push(todo)
+        }
+        else{
+          todo.index = indexOfFinishedTodo++
+          completedList.push(todo)
+        }
+      }
+      this.todos = unfinishedList.concat(completedList)
     }
   },
   watch:{
@@ -101,7 +126,7 @@ export default {
     const res = await fetch('/todo')
     const results = await res.json()
     this.todos = results
-    this.todos.reverse()
+    this.sortTodoList()
     this.todosToDisplay = this.todos
     this.setPage()
   },

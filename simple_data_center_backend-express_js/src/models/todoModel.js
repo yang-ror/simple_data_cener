@@ -11,6 +11,9 @@ export const TodoSchema = new Schema({
         type: Boolean,
         default: false
     },
+    timeOfStateChange: {
+        type: Date
+    },
     hide: {
         type: Boolean,
         default: false

@@ -15,18 +15,7 @@ export const addFile = (req, res) => {
     const file = req.file
     var filePath = './public/files/'
     var filename = getFileName(file.originalname)
-
-    
-
     let stats = fs.lstatSync(filePath + filename);
-    // console.log(stats.mtime)
-
-    // fs.utimesSync(filePath + filename, Date.now(), Date.now())
-    
-    // stats = fs.lstatSync(filePath + filename);
-    // console.log(stats.mtime)
-
-
     
     let newFile = {
         name: filename,
@@ -64,7 +53,7 @@ export const getFiles = (req, res) => {
 
     fs.readdirSync(path).forEach(file => {
         if(!file.startsWith('.')){
-            let stats = fs.lstatSync(path + file);
+            let stats = fs.lstatSync(path + file)
             if(!stats.isDirectory()){
                 let newFile = {
                     name: file,
@@ -76,7 +65,7 @@ export const getFiles = (req, res) => {
             }
         }
     });
-    files.sort((a, b) => a.date + b.date)
+    files.sort((a, b) => (a.date > b.date) ? 1 : ((b.date > a.date) ? -1 : 0))
     res.json(files)
 }
 

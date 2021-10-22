@@ -2,9 +2,9 @@
   <div ref="thisPanel" :style="(currentPage!=1&&currentPage==numberOfPages)? `height:${panelHeight}px` : ''">
     <FileUploadForm @newFile="newFile" />
     <ul class="list-group">
-      <template v-for="(file, index) in filesInCurrentPage" >
-        <File :key="file.index" v-if="!file.hide" :index="index+(currentPage-1)*itemPerPage" @renameFile="renameFile" @deleteThisFile="deleteFile" :name="file.name" :url="file.path" />
-      </template>
+      <li class="list-group-item" v-for="(file, index) in filesInCurrentPage" :key="file.index" :style="{background: colors.bright, color: colors.text}">
+        <File v-if="!file.hide" :index="index+(currentPage-1)*itemPerPage" @renameFile="renameFile" @deleteThisFile="deleteFile" :name="file.name" :url="file.path" />
+      </li>
     </ul>
     <PageIndicator v-if="numberOfPages>1" @pervious-page="goToPerviousPage" @next-page="goToNextPage" :numOfPages="numberOfPages" :currentPage="currentPage" />
   </div>
@@ -34,7 +34,7 @@ export default {
     PageIndicator
   },
   computed:{
-    ...mapState(["mediaListUpdate", "deletedMedia", "itemFilter"])
+    ...mapState(["mediaListUpdate", "deletedMedia", "itemFilter", "colors"])
   },
   methods: {
     ...mapMutations(["setFileList"]),
