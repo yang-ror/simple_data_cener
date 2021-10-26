@@ -22,7 +22,7 @@ export default {
       medias: [],
       mediasToDisplay: [],
       mediasInCurrentPage: [],
-      itemPerPage: 23,
+      itemPerPage: 24,
       currentPage: 1,
       numberOfPages: 1,
       panelHeight: 0
@@ -38,15 +38,14 @@ export default {
   methods:{
     ...mapMutations(["deleteFileFromMedia"]),
     setPage(){
-      if(this.mediasToDisplay.length < this.itemPerPage){
+      if(this.mediasToDisplay.length <= this.itemPerPage){
         this.numberOfPages = 1
         this.mediasInCurrentPage = this.mediasToDisplay
       }
       else{
         this.numberOfPages = parseInt(this.mediasToDisplay.length / this.itemPerPage) + 1
         this.mediasInCurrentPage = this.mediasToDisplay.slice((this.currentPage-1)*this.itemPerPage, 
-          this.currentPage < this.numberOfPages ? 
-            (this.currentPage)*this.itemPerPage : this.mediasToDisplay.length-1
+          this.currentPage < this.numberOfPages ? (this.currentPage)*this.itemPerPage : this.mediasToDisplay.length
         )
       }
     },
@@ -59,6 +58,7 @@ export default {
     },
     goToNextPage(){
       if(this.currentPage < this.numberOfPages){
+        this.panelHeight = this.$refs.thisPanel.clientHeight
         this.currentPage++
         this.setPage()
         this.$forceUpdate()
@@ -152,9 +152,6 @@ export default {
       this.setPage()
       this.$forceUpdate()
     }
-  },
-  mounted(){
-    this.panelHeight = this.$refs.thisPanel.clientHeight
   }
 }
 </script>

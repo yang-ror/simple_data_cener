@@ -1,8 +1,7 @@
 <template>
-
-<div>
-    {{index+1}}. 
-    <a v-if="!editingMode" :href="url" target='_blank' :style="{color: colors.primary}">{{title}}</a>
+<div class="link-holder">
+    <label class="link-index">{{index+1}}.</label>
+    <div v-if="!editingMode" class="link-label" :style="{color: colors.primary}"><a :href="url" target='_blank' class="link-a" :style="{color: colors.primary}">{{title}}</a></div>
     <input v-if="editingMode" @keyup.enter="submitEditing" v-model="linkTitle" :style="{color: colors.text, background: colors.background}" class="rename-input">
     <div v-if="!editingMode && !showCleanBtn.links" class="link-btn-group" :style="{color: colors.primary}">
         <div class="link-btn-holder" @click="startEditing"><RenameIcon class="link-btn" /></div>
@@ -77,6 +76,23 @@ export default {
 </script>
 
 <style scoped>
+.link-holder{
+    transform: translate(0, 4px);
+}
+.link-index{
+    margin-right: 5px;
+    overflow: hidden;
+}
+.link-label{
+    display: inline-block;
+    width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.link-a{
+    width: 100%;
+    white-space: nowrap;
+}
 .link-btn-group{
     float: right;
 }
@@ -93,15 +109,16 @@ export default {
     margin-bottom: 3px;
 }
 .link-btn-holder:hover{
-    background-color: rgba(163, 163, 163, 0.8);
+    background-color: rgba(163, 163, 163, 0.5);
 }
 .link-btn-holder:active{
-    background-color: rgba(163, 163, 163, 0.5);
+    background-color: rgba(163, 163, 163, 0.3);
 }
 .rename-input{
     border-color: #42b883;
     border-radius: 5px;
-    width: 50%;
+    width: 70%;
     min-width: 208px;
+    transform: translate(-4px, -7px);
 }
 </style>

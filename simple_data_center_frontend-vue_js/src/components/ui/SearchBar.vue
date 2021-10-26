@@ -39,6 +39,9 @@ export default {
     height: 38px;
     border-radius: 19px 0 0 19px;
 }
+.search-bar:hover{
+    filter: brightness(1.2);
+}
 .search-input-holder, .search-icon-holder{
     height: 100%;
     display: inline-block;

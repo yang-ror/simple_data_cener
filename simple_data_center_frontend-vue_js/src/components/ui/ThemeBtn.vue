@@ -10,7 +10,10 @@ import { mapState, mapMutations } from "vuex"
 export default {
     name: 'ThemeBtn',
     methods: {
-        ...mapMutations(["switchTheme"])
+        ...mapMutations(["setLightMode", "setDarkMode"]),
+        switchTheme(){
+            this.darkMode ? this.setLightMode() : this.setDarkMode()
+        }
     },
     computed:{
         ...mapState(["darkMode", "colors"])
@@ -21,11 +24,15 @@ export default {
 <style scoped>
 button{
     margin-left: 10px;
-}
-.btn{
     width: 38px;
 }
 .theme-icon{
     transform: translate(-2px, -1px);
+}
+button:hover{
+    filter: brightness(1.2);
+}
+button:active{
+    filter: brightness(0.75);
 }
 </style>

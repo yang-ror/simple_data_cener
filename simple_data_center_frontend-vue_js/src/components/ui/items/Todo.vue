@@ -1,9 +1,9 @@
 <template>
-<div>
+<div class="todo-holder">
     <input class="form-check-input" type="checkbox" v-model="isCompleted" @click="toogleComplete">
-    {{index}}.
-    <label v-if="!editingMode" :class="isCompleted ? 'completed-todo' : ''" :style="{color: colors.primary, textDecorationColor: colors.secondary}">{{title}}</label>
-    <input v-if="editingMode" @keyup.enter="submitEditing" v-model="todoTitle" :style="{color: colors.text, background: colors.background}" class="rename-input">
+    <label class="todo-index">{{index}}.</label>
+    <label v-if="!editingMode" :class="isCompleted ? 'completed-todo' : ''" :style="{color: colors.primary, textDecorationColor: colors.secondary}" class="todo-label">{{title}}</label>
+    <input v-if="editingMode" @keyup.enter="submitEditing" v-model="todoTitle" :style="{color: colors.text, background: colors.background}" class="todo-input">
     <div v-if="!editingMode && !showCleanBtn.todo" class="todo-btn-group" :style="{color: colors.primary}">
         <div class="todo-btn-holder" @click="startEditing"><RenameIcon class="todo-btn" /></div>
     </div>
@@ -101,6 +101,12 @@ export default {
 </script>
 
 <style scoped>
+.todo-holder{
+    transform: translate(0, 4px);
+}
+.form-check-input{
+    cursor: pointer;
+}
 .todo-btn-group{
     float: right;
 }
@@ -117,23 +123,27 @@ export default {
     margin-bottom: 3px;
 }
 .todo-btn-holder:hover{
-    background-color: rgba(163, 163, 163, 0.8);
+    background-color: rgba(163, 163, 163, 0.5);
 }
 .todo-btn-holder:active{
-    background-color: rgba(163, 163, 163, 0.5);
+    background-color: rgba(163, 163, 163, 0.3);
 }
 .todo-index{
     margin-left: 10px;
     margin-right: 5px;
+    overflow: hidden;
 }
-.todo-title{
-    width: 50%;
+.todo-label{
+    width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
-.rename-input{
+.todo-input{
     border-color: #42b883;
     border-radius: 5px;
-    width: 50%;
+    width: 70%;
     min-width: 208px;
+    transform: translate(-4px, -7px);
 }
 .completed-todo{
     text-decoration: line-through;

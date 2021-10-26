@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import { createStore } from "vuex"
+
 import { 
     BIconBookmarkCheckFill,
     BIconMoonStarsFill, 
@@ -58,32 +59,31 @@ const store = createStore({
         }
     },
     mutations: {
-        switchTheme(state){
-            if(state.darkMode){
-                state.colors = {
-                    text: "#000000",
-                    secondaryText: "#ffffff",
-                    primary: "#35495e",
-                    secondary: "#42b883",
-                    background: "#ffffff",
-                    bright: "#f8f8f8",
-                    disabled: "#ececec"
-                }
-                document.querySelector('body').setAttribute('style', `background:${state.colors.background}`)
-            }
-            else{
-                state.colors = {
-                    text: "#ffffff",
-                    secondaryText: "#000000",
-                    primary: "#42b883",
-                    secondary: "#35495e",
-                    background: "#151515",
-                    bright: "#333333",
-                    disabled: "#777777"
-                }
+        setDarkMode(state){
+            state.colors = {
+                text: "#ffffff",
+                secondaryText: "#000000",
+                primary: "#42b883",
+                secondary: "#35495e",
+                background: "#151515",
+                bright: "#333333",
+                disabled: "#777777"
             }
             document.querySelector('body').setAttribute('style', `background:${state.colors.background}`)
-            state.darkMode = !state.darkMode
+            state.darkMode = true
+        },
+        setLightMode(state){
+            state.colors = {
+                text: "#000000",
+                secondaryText: "#ffffff",
+                primary: "#35495e",
+                secondary: "#42b883",
+                background: "#ffffff",
+                bright: "#f8f8f8",
+                disabled: "#ececec"
+            }
+            document.querySelector('body').setAttribute('style', `background:${state.colors.background}`)
+            state.darkMode = false
         },
         goToPanel(state, payload){
             if(payload != state.panels[0]){

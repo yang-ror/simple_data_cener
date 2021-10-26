@@ -2,7 +2,7 @@
   <div ref="thisPanel" :style="(currentPage!=1&&currentPage==numberOfPages)? `height:${panelHeight}px` : ''">
     <FileUploadForm @newFile="newFile" />
     <ul class="list-group">
-      <li class="list-group-item" v-for="(file, index) in filesInCurrentPage" :key="file.index" :style="{background: colors.bright, color: colors.text}">
+      <li class="list-group-item" v-for="(file, index) in filesInCurrentPage" :key="file.index" :style="{background: colors.bright, color: colors.text}" :class="darkMode ? 'dark-item' : 'light-item'">
         <File v-if="!file.hide" :index="index+(currentPage-1)*itemPerPage" @renameFile="renameFile" @deleteThisFile="deleteFile" :name="file.name" :url="file.path" />
       </li>
     </ul>
@@ -34,20 +34,19 @@ export default {
     PageIndicator
   },
   computed:{
-    ...mapState(["mediaListUpdate", "deletedMedia", "itemFilter", "colors"])
+    ...mapState(["mediaListUpdate", "deletedMedia", "itemFilter", "colors", "darkMode"])
   },
   methods: {
     ...mapMutations(["setFileList"]),
     setPage(){
-      if(this.filesToDisplay.length < this.itemPerPage){
+      if(this.filesToDisplay.length <= this.itemPerPage){
         this.numberOfPages = 1
         this.filesInCurrentPage = this.filesToDisplay
       }
       else{
         this.numberOfPages = parseInt(this.filesToDisplay.length / this.itemPerPage) + 1
         this.filesInCurrentPage = this.filesToDisplay.slice((this.currentPage-1)*this.itemPerPage, 
-          this.currentPage < this.numberOfPages ? 
-            (this.currentPage)*this.itemPerPage : this.filesToDisplay.length-1
+          this.currentPage < this.numberOfPages ? (this.currentPage)*this.itemPerPage : this.filesToDisplay.length
         )
       }
     },
@@ -60,6 +59,7 @@ export default {
     },
     goToNextPage(){
       if(this.currentPage < this.numberOfPages){
+        this.panelHeight = this.$refs.thisPanel.clientHeight
         this.currentPage++
         this.setPage()
         this.$forceUpdate()
@@ -114,13 +114,15 @@ export default {
     this.setFileList(this.files)
     this.filesToDisplay = this.files
     this.setPage()
-  },
-  mounted(){
-    this.panelHeight = this.$refs.thisPanel.clientHeight
   }
 }
 </script>
 
 <style scoped>
-
+.dark-item:hover{
+    filter: brightness(1.2);
+}
+.light-item:hover{
+    filter: brightness(0.9);
+}
 </style>

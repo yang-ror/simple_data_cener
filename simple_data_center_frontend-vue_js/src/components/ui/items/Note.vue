@@ -1,11 +1,11 @@
 <template>
 <div class="card text-white mb-3" :class="darkMode ? 'bg-dark' : 'bg-light'" style="max-width: 18rem;">
     <div class="card-header" :style="{color: colors.text}">
-        {{noteNumber}}
+        {{noteNumber}}. <label class="note-date" v-if="id!=0" :style="{color: colors.primary}">{{noteDate}}</label>
         <div v-if="!editingMode && !showCleanBtn.notes" class="note-btn-group" :style="{color: colors.primary}">
             <div class="note-btn-holder" @click="startEditing"><EditIcon class="note-btn" /></div>
             <!-- <div class="note-btn-holder"><ViewInBoxIcon class="note-btn" /></div> -->
-            <div class="note-btn-holder" @click="copyToClipBoard(content)"><CopyIcon class="note-btn" /></div>
+            <div class="note-btn-holder" @click="copyContentToClipBoard"><CopyIcon class="note-btn" /></div>
         </div>
         <div v-if="editingMode" class="note-btn-group" :style="{color: colors.primary}">
             
@@ -34,13 +34,15 @@ export default {
         return{
             noteContent: "",
             editingMode: false,
-            noteNumber: ""
+            noteNumber: "",
+            noteDate: ""
         }
     },
     props:{
         index: Number,
         id: String,
         content: String,
+        date: Date
     },
     computed:{
         ...mapState(["showCleanBtn", "showNoteBox", "darkMode", "colors"]),
@@ -58,18 +60,21 @@ export default {
         },
         async submitEditing(){
             if(this.noteContent != "" && this.noteContent != this.content){
-                var newNote = {
-                    content: this.noteContent,
-                }
                 var requestMethod = ''
                 var requestUrl = ''
+                var newNote = {}
                 if(this.id == 0){
                     requestMethod = 'POST'
                     requestUrl = '/note'
+                    newNote = {
+                        content: this.noteContent,
+                        date: Date.now()
+                    }
                 }
                 else{
                     requestMethod = 'PUT'
                     requestUrl = '/note/' + this.id
+                    newNote = {content: this.noteContent}
                 }
                 const res = await fetch(requestUrl, {
                     method: requestMethod,
@@ -83,7 +88,7 @@ export default {
                 this.$emit(this.id == 0 ? 'newNote' : 'editNote', results)
             }
             else{
-                this.cancelEditing()
+                if(this.id != 0) this.cancelEditing()
             }
         },
         cancelEditing(){
@@ -108,6 +113,7 @@ export default {
         }
         else{
             this.noteNumber = this.index+1
+            this.noteDate = `${new Date(this.date).getMonth() + 1}-${new Date(this.date).getDate()}-${new Date(this.date).getFullYear()}`
         }
     }
 }
@@ -120,6 +126,10 @@ export default {
     .card-header{
         display: inline-block;
     }
+    .note-date{
+        margin-left: 15px;
+        font-size: 0.8em;
+    }
     .note-btn-group{
         float: right;
     }
@@ -131,10 +141,10 @@ export default {
         cursor: pointer;
     }
     .note-btn-holder:hover{
-        background-color: rgba(163, 163, 163, 0.8);
+        background-color: rgba(163, 163, 163, 0.5);
     }
     .note-btn-holder:active{
-        background-color: rgba(163, 163, 163, 0.5);
+        background-color: rgba(163, 163, 163, 0.3);
     }
     .note-btn{
         margin-left: 4px;

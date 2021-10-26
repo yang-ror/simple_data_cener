@@ -5,7 +5,7 @@
           <Note @newNote="newNote" :id="0" />
         </div>
         <div v-for="(note, index) in notesInCurrentPage" :key="note._id" class="col">
-          <Note @editNote="editNote" @deleteThisNote="deleteNote" v-if="!note.hide" :index="index+(currentPage-1)*itemPerPage" :id="note._id" :content="note.content" />
+          <Note @editNote="editNote" @deleteThisNote="deleteNote" v-if="!note.hide" :index="index+(currentPage-1)*itemPerPage" :id="note._id" :content="note.content" :date="note.date"/>
         </div>
       </div>
       <PageIndicator v-if="numberOfPages!=1" @pervious-page="goToPerviousPage" @next-page="goToNextPage" :numOfPages="numberOfPages" :currentPage="currentPage" />
@@ -29,7 +29,7 @@ export default {
     }
   },
   computed:{
-      ...mapState(["itemFilter", "colors"])
+      ...mapState(["itemFilter", "colors", "darkMode"])
   },
   components:{
     Note,
@@ -37,15 +37,14 @@ export default {
   },
   methods:{
     setPage(){
-      if(this.notesToDisplay.length < this.itemPerPage){
+      if(this.notesToDisplay.length <= this.itemPerPage){
         this.numberOfPages = 1
         this.notesInCurrentPage = this.notesToDisplay
       }
       else{
         this.numberOfPages = parseInt(this.notesToDisplay.length / this.itemPerPage) + 1
         this.notesInCurrentPage = this.notesToDisplay.slice((this.currentPage-1)*this.itemPerPage, 
-          this.currentPage < this.numberOfPages ? 
-            (this.currentPage)*this.itemPerPage : this.notesToDisplay.length-1
+          this.currentPage < this.numberOfPages ? (this.currentPage)*this.itemPerPage : this.notesToDisplay.length
         )
       }
     },
@@ -58,6 +57,7 @@ export default {
     },
     goToNextPage(){
       if(this.currentPage < this.numberOfPages){
+        this.panelHeight = this.$refs.thisPanel.clientHeight
         this.currentPage++
         this.setPage()
         this.$forceUpdate()
@@ -84,6 +84,7 @@ export default {
           break
         }
       }
+      this.setPage()
       this.$forceUpdate()
     }
   },
@@ -104,9 +105,6 @@ export default {
     this.notes.reverse()
     this.notesToDisplay = this.notes
     this.setPage()
-  },
-  mounted(){
-    this.panelHeight = this.$refs.thisPanel.clientHeight
   }
 }
 </script>

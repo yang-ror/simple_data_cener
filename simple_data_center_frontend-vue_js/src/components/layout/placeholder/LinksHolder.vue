@@ -2,7 +2,7 @@
   <div ref="thisPanel" :style="(currentPage!=1&&currentPage==numberOfPages)? `height:${panelHeight}px` : ''">
     <AddLinkForm @newLink="newLink" />
     <ul class="list-group">
-      <li class="list-group-item" v-for="(link, index) in linksInCurrentPage" :key="link._id" :style="{background: colors.bright, color: colors.text}">
+      <li class="list-group-item" v-for="(link, index) in linksInCurrentPage" :key="link._id" :style="{background: colors.bright, color: colors.text}" :class="darkMode ? 'dark-item' : 'light-item'">
         <Link  v-if="!link.hide" :index="index+(currentPage-1)*itemPerPage" @editLink="editLink" @deleteThisLink="deleteLink" :id="link._id" :title="link.title" :url="link.url" />
       </li>
     </ul>
@@ -33,19 +33,18 @@ export default {
     PageIndicator
   },
   computed:{
-    ...mapState(["itemFilter", "colors"])
+    ...mapState(["itemFilter", "colors", "darkMode"])
   },
   methods:{
     setPage(){
-      if(this.linksToDisplay.length < this.itemPerPage){
+      if(this.linksToDisplay.length <= this.itemPerPage){
         this.numberOfPages = 1
         this.linksInCurrentPage = this.linksToDisplay
       }
       else{
         this.numberOfPages = parseInt(this.linksToDisplay.length / this.itemPerPage) + 1
         this.linksInCurrentPage = this.linksToDisplay.slice((this.currentPage-1)*this.itemPerPage, 
-          this.currentPage < this.numberOfPages ? 
-            (this.currentPage)*this.itemPerPage : this.linksToDisplay.length-1
+          this.currentPage < this.numberOfPages ? (this.currentPage)*this.itemPerPage : this.linksToDisplay.length
         )
       }
     },
@@ -58,6 +57,7 @@ export default {
     },
     goToNextPage(){
       if(this.currentPage < this.numberOfPages){
+        this.panelHeight = this.$refs.thisPanel.clientHeight
         this.currentPage++
         this.setPage()
         this.$forceUpdate()
@@ -69,7 +69,7 @@ export default {
       this.$forceUpdate()
     },
     deleteLink(id){
-      // this.links.filter(link => link.id != id)
+      // this.links = this.links.filter((link) => link._id != id)
       for(let i = 0; i < this.links.length; i++){
         if(this.links[i]._id == id){
           this.links.splice(i, 1)
@@ -105,13 +105,15 @@ export default {
     this.links.reverse()
     this.linksToDisplay = this.links
     this.setPage()
-  },
-  mounted(){
-    this.panelHeight = this.$refs.thisPanel.clientHeight
   }
 }
 </script>
 
-<style>
-
+<style scoped>
+.dark-item:hover{
+    filter: brightness(1.2);
+}
+.light-item:hover{
+    filter: brightness(0.9);
+}
 </style>

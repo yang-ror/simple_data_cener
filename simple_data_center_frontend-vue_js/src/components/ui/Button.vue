@@ -24,4 +24,10 @@ export default {
 button{
     margin-right: 5px;
 }
+button:hover{
+    filter: brightness(1.5);
+}
+button:active{
+    filter: brightness(0.75);
+}
 </style>

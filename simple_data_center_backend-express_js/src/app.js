@@ -1,10 +1,10 @@
 import express from 'express'
 import mongoose from 'mongoose'
 
-import todoRoutes from './src/routes/todoRoute'
-import fileRoutes from './src/routes/fileRoute'
-import linkRoutes from './src/routes/linkRoute'
-import noteRoutes from './src/routes/noteRoute'
+import todoRoutes from './routes/todoRoute'
+import fileRoutes from './routes/fileRoute'
+import linkRoutes from './routes/linkRoute'
+import noteRoutes from './routes/noteRoute'
 
 const app = express()
 const PORT = 4000
@@ -26,7 +26,7 @@ linkRoutes(app);
 noteRoutes(app);
 
 app.get('/', (req, res) => 
-    res.sendFile(path.join(__dirname + '/public/index.html'))
+    res.sendFile(path.join(__dirname + '../public/index.html'))
 )
 
 app.listen(PORT, () =>

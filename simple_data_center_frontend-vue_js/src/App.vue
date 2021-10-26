@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex"
+import { mapState, mapMutations } from "vuex"
 import Header from "./components/layout/Header.vue"
 import DataPanel from "./components/layout/DataPanel.vue"
 export default {
@@ -20,7 +20,11 @@ export default {
   computed:{
     ...mapState(["colors", "panels"])
   },
+  methods:{
+    ...mapMutations(["setDarkMode", "setLightMode"]),
+  },
   created() {
+    window.matchMedia('(prefers-color-scheme: dark)').matches ? this.setDarkMode() : this.setLightMode()
     document.querySelector('body').setAttribute('style', `background:${this.colors.background}`)
   }
 }
@@ -32,8 +36,6 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-width: 371px;
-  margin-top: 60px;
-  margin-bottom: 100px;
 }
 .panel{
   margin-top: 60px;

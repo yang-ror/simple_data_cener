@@ -1,18 +1,19 @@
 <template>
-<div class="media-holder position-relative" @click="showCleanBtn.media ? deleteMedia() : showMedia()" :style="backgroundProperties">
+<div class="media-holder position-relative" :class="type == 'image' ? 'image-holder' : ''" @click="showCleanBtn.media ? deleteMedia() : showMedia()" :style="backgroundProperties">
     <div class="media-info-holder">
         <label class="media-id text-truncate">{{mediaNumber}}</label>
         <label class="dot text-truncate" v-if="type!='upload'">.</label>
         <label class="media-name text-truncate" v-if="type!='upload'">{{name}}</label>
-
     </div>
     <UploadIcon v-if="type=='upload'" class="upload-icon position-absolute top-50 start-50 translate-middle" />
+    <AudioPlayer v-if="type=='audio'" :url="url" />
     <div class="trash-icon-holder position-absolute top-50 start-50 translate-middle"><TrashIcon v-if="showCleanBtn.media && type!='upload'" class="delete-icon" /></div>
 </div>
 </template>
 
 <script>
 import { mapState } from "vuex"
+import { AudioPlayer } from './AudioPlayer.vue'
 export default {
     data(){
         return{
@@ -21,7 +22,8 @@ export default {
                 backgroundPosition: 'center',
                 backgroundSize: 'cover'
             },
-            mediaNumber: ""
+            mediaNumber: "",
+            urlForDisplay: ""
         }
     },
     props:{
@@ -30,11 +32,19 @@ export default {
         type: String,
         url: String
     },
+    components:{
+        AudioPlayer
+    },
     methods:{
         showMedia(){
             console.log(this.name)
             console.log(this.url)
             console.log(this.backgroundProperties)
+        },
+        fixedEncodeURIComponent(str) {
+            return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+                return '%' + c.charCodeAt(0).toString(16)
+            })
         },
         async deleteMedia(){
             const res = await fetch('/file/' + this.name, {
@@ -51,7 +61,7 @@ export default {
     watch:{
         url(){
             if(this.type == "image"){
-                this.backgroundProperties.backgroundImage = `url(${this.url})`
+                this.backgroundProperties.backgroundImage = `url(${this.fixedEncodeURIComponent(this.url)})`
             }
         }
     },
@@ -60,8 +70,9 @@ export default {
             this.mediaNumber = "Upload"
         }
         else{
+            this.urlForDisplay = this.fixedEncodeURIComponent(this.url)
             if(this.type == "image"){
-                this.backgroundProperties.backgroundImage = `url(${this.url})`
+                this.backgroundProperties.backgroundImage = `url(${this.urlForDisplay})`
             }
             this.mediaNumber = this.index+1
         }   
@@ -78,7 +89,7 @@ export default {
     border-radius: 5px;
     cursor: pointer;
 }
-.media-holder:hover{
+.image-holder:hover{
     filter: brightness(75%);
 }
 .media-info-holder{

@@ -2,7 +2,7 @@
   <div ref="thisPanel" :style="(currentPage!=1&&currentPage==numberOfPages)? `height:${panelHeight}px` : ''">
     <AddTodoForm @newTodo="newTodo" />
     <ul class="list-group">
-      <li class="list-group-item" v-for="todo in todosInCurrentPage" :key="todo._id" :style="{background: colors.bright, color: colors.text}">
+      <li class="list-group-item" v-for="todo in todosInCurrentPage" :key="todo._id" :style="{background: colors.bright, color: colors.text}" :class="darkMode ? 'dark-item' : 'light-item'">
         <Todo v-if="!todo.hide" :index="todo.index" @editTodo="editTodo" @deleteThisTodo="deleteTodo" :id="todo._id" :title="todo.title" :completed="todo.completed" />
       </li>
     </ul>
@@ -33,42 +33,37 @@ export default {
     PageIndicator
   },
   computed:{
-    ...mapState(["itemFilter", "colors"])
+    ...mapState(["itemFilter", "colors", "darkMode"])
   },
   methods:{
     setPage(){
-      if(this.todosToDisplay.length < this.itemPerPage){
-        this.numberOfPages = 1
+      if(this.todosToDisplay.length <= this.itemPerPage){
+        this.numberOfPages = 1 
         this.todosInCurrentPage = this.todosToDisplay
       }
       else{
         this.numberOfPages = parseInt(this.todosToDisplay.length / this.itemPerPage) + 1
         this.todosInCurrentPage = this.todosToDisplay.slice((this.currentPage-1)*this.itemPerPage, 
-          this.currentPage < this.numberOfPages ? 
-            (this.currentPage)*this.itemPerPage : this.todosToDisplay.length-1
+          this.currentPage < this.numberOfPages ? (this.currentPage)*this.itemPerPage : this.todosToDisplay.length
         )
       }
     },
     goToPerviousPage(){
       if(this.currentPage > 1){
         this.currentPage--
-        this.setPage()
-        this.$forceUpdate()
+        this.rerenderList()
       }
     },
     goToNextPage(){
       if(this.currentPage < this.numberOfPages){
+        this.panelHeight = this.$refs.thisPanel.clientHeight
         this.currentPage++
-        this.setPage()
-        this.$forceUpdate()
+        this.rerenderList()
       }
     },
     newTodo(newlTodo){
       this.todos.push(newlTodo)
       this.sortTodoList()
-      this.todosToDisplay = this.todos
-      this.setPage()
-      this.$forceUpdate()
     },
     deleteTodo(id){
       for(let i = 0; i < this.todos.length; i++){
@@ -77,8 +72,7 @@ export default {
           break
         }
       }
-      this.setPage()
-      this.$forceUpdate()
+      this.sortTodoList()
     },
     editTodo(newTodo){
       for(let i = 0; i < this.todos.length; i++){
@@ -88,9 +82,6 @@ export default {
         }
       }
       this.sortTodoList()
-      this.todosToDisplay = this.todos
-      this.setPage()
-      this.$forceUpdate()
     },
     sortTodoList(){
       this.todos.sort((a, b) => (a.timeOfStateChange < b.timeOfStateChange) ? 1 : ((b.timeOfStateChange < a.timeOfStateChange) ? -1 : 0))
@@ -110,6 +101,12 @@ export default {
         }
       }
       this.todos = unfinishedList.concat(completedList)
+      this.todosToDisplay = this.todos
+      this.rerenderList()
+    },
+    rerenderList(){
+      this.setPage()
+      this.$forceUpdate()
     }
   },
   watch:{
@@ -127,15 +124,16 @@ export default {
     const results = await res.json()
     this.todos = results
     this.sortTodoList()
-    this.todosToDisplay = this.todos
     this.setPage()
-  },
-  mounted(){
-    this.panelHeight = this.$refs.thisPanel.clientHeight
   }
 }
 </script>
 
-<style>
-
+<style scoped>
+.dark-item:hover{
+    filter: brightness(1.2);
+}
+.light-item:hover{
+    filter: brightness(0.9);
+}
 </style>

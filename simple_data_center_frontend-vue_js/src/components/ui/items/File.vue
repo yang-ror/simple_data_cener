@@ -1,8 +1,8 @@
 <template>
-<div>
-    {{index+1}}. 
-    <a v-if="!editingMode" :href="url" target='_blank' :style="{color: colors.primary}">{{name}}</a>
-    <input v-if="editingMode" @keyup.enter="submitEditing" v-model="filename" :style="{color: colors.text, background: colors.background}" class="rename-input">
+<div class="file-holder">
+    <label class="file-index">{{index+1}}.</label>
+    <div v-if="!editingMode" class="file-label" :style="{color: colors.primary}"><a :href="url" target='_blank' class="file-a" :style="{color: colors.primary}">{{name}}</a></div>
+    <input v-if="editingMode" @keyup.enter="submitEditing" v-model="filename" :style="{color: colors.text, background: colors.background}" class="filename-input">
     <div v-if="!editingMode && !showCleanBtn.files" class="file-btn-group" :style="{color: colors.primary}">
         <!-- <div class="file-btn-holder"><ShowInMediaIcon class="file-btn" /></div> -->
         <div class="file-btn-holder" @click="startEditing"><RenameIcon class="file-btn" /></div>
@@ -74,6 +74,23 @@ export default {
 </script>
 
 <style scoped>
+.file-holder{
+    transform: translate(0, 4px);
+}
+.file-index{
+    margin-right: 5px;
+    overflow: hidden;
+}
+.file-label{
+    display: inline-block;
+    width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.file-a{
+    width: 100%;
+    white-space: nowrap;
+}
 .file-btn-group{
     float: right;
 }
@@ -90,15 +107,16 @@ export default {
     margin-bottom: 3px;
 }
 .file-btn-holder:hover{
-    background-color: rgba(163, 163, 163, 0.8);
-}
-.file-btn-holder:active{
     background-color: rgba(163, 163, 163, 0.5);
 }
-.rename-input{
+.file-btn-holder:active{
+    background-color: rgba(163, 163, 163, 0.3);
+}
+.filename-input{
     border-color: #42b883;
     border-radius: 5px;
-    width: 50%;
+    width: 70%;
     min-width: 208px;
+    transform: translate(-4px, -7px);
 }
 </style>

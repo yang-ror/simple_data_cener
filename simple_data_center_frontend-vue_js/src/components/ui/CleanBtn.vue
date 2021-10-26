@@ -32,11 +32,18 @@ export default {
 <style scoped>
 button{
     margin-left: 10px;
-}
-.btn{
     width: 38px;
 }
+/* .btn{
+    
+} */
 .trash-icon{
     transform: translate(-2px, -1px);
+}
+button:hover{
+    filter: brightness(1.2);
+}
+button:active{
+    filter: brightness(0.75);
 }
 </style>

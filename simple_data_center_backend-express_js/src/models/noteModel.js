@@ -7,6 +7,9 @@ export const NoteSchema = new Schema({
         type: String, 
         required: "Must have a content"
     },
+    date: {
+        type: Date
+    },
     hide: {
         type: Boolean,
         default: false
