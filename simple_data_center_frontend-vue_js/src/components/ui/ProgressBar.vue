@@ -1,11 +1,12 @@
 <template>
   <div class="progress" :style="{background: colors.disabled}">
-    <div 
+    <div v-if="percentage<100"
         class="progress-bar" 
         :style="{background: colors.secondary, color: colors.text, width: percentage + '%'}" 
         role="progressbar"
     >
     </div>
+    <div v-if="percentage==100" class="progress-bar progress-bar-striped bg-success progress-bar-animated" style="width: 100%"></div>
     <div id="progress-label">{{label}}</div>
   </div>
 </template>
@@ -15,7 +16,7 @@ import { mapState } from "vuex"
 
 export default {
     props:{
-        percentage: String,
+        percentage: Number,
         label: String
     },
     computed:{

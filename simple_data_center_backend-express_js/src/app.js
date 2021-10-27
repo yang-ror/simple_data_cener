@@ -7,7 +7,7 @@ import linkRoutes from './routes/linkRoute'
 import noteRoutes from './routes/noteRoute'
 
 const app = express()
-const PORT = 4000
+const PORT = 3060
 const MongoIP = "localhost"
 
 mongoose.Promise = global.Promise

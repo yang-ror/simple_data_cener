@@ -111,7 +111,7 @@ export default {
 
 <style scoped>
 .col{
-  min-width: 324px;
-  max-width: 324px;
+  min-width: 330px;
+  max-width: 330px;
 }
 </style>

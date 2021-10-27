@@ -1,11 +1,11 @@
 <template>
-<div class="card text-white mb-3" :class="darkMode ? 'bg-dark' : 'bg-light'" style="max-width: 18rem;">
+<div class="card text-white mb-3" :class="darkMode ? 'bg-dark' : 'bg-light'">
     <div class="card-header" :style="{color: colors.text}">
         {{noteNumber}}. <label class="note-date" v-if="id!=0" :style="{color: colors.primary}">{{noteDate}}</label>
         <div v-if="!editingMode && !showCleanBtn.notes" class="note-btn-group" :style="{color: colors.primary}">
             <div class="note-btn-holder" @click="startEditing"><EditIcon class="note-btn" /></div>
             <!-- <div class="note-btn-holder"><ViewInBoxIcon class="note-btn" /></div> -->
-            <div class="note-btn-holder" @click="copyContentToClipBoard"><CopyIcon class="note-btn" /></div>
+            <!-- <div class="note-btn-holder" @click="copyContentToClipBoard"><CopyIcon class="note-btn" /></div> -->
         </div>
         <div v-if="editingMode" class="note-btn-group" :style="{color: colors.primary}">
             
@@ -53,7 +53,7 @@ export default {
         }
     },
     methods:{
-        ...mapMutations(["copyToClipBoard", "toggleNoteBox"]),
+        ...mapMutations(["toggleNoteBox"]),
         startEditing(){
             this.noteContent = this.content
             this.editingMode = true
@@ -94,9 +94,9 @@ export default {
         cancelEditing(){
             this.editingMode = false
         },
-        copyContentToClipBoard(){
+        // copyContentToClipBoard(){
             
-        },
+        // },
         async deleteNote(){
             const res = await fetch('/note/' + this.id, {
                 method: 'DELETE'
@@ -152,17 +152,18 @@ export default {
         margin-bottom: 3px;
     }
     .card-body{
-        overflow: auto;
+        overflow: hide;
     }
     .card-text{
-        height: 100%;
+        height: 11.5em;
+        /* overflow: auto; */
     }
     .editingArea{
         border: none;
         resize: none;
-        height: 12.4em;
+        height: 11.5em;
         width: 100%;
-        font-size: 0.8em;
+        font-size: 0.9em;
     }
 
     ::-webkit-scrollbar {

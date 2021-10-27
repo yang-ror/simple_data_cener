@@ -8,29 +8,43 @@
          :style="{background: colors.secondary, color: colors.text}"
     >Upload</label>
   </div>
+  <ProgressBar v-if="uploading" :percentage="100" label="Uploading ..." />
 </form>
 </template>
 
 <script>
 import { mapState } from "vuex"
+import ProgressBar from "../ProgressBar.vue"
 export default {
-    computed:{
-      ...mapState(["colors"])
-    },
-    methods:{
-      async uploadFile(){
-        var form = this.$refs.uploadForm
-        var formData = new FormData(form)
-        // console.log(formData)
-        const res = await fetch('/upload', {
-          method: 'POST',
-          body: formData
-        })
-        const results = await res.json()
-        this.$refs.fileSelect.value = null
-        this.$emit('newFile', results)
-      }
+  data(){
+    return{
+      uploading: false
     }
+  },
+  components:{
+    ProgressBar
+  },
+  computed:{
+    ...mapState(["colors"])
+  },
+  methods:{
+    async uploadFile(){
+      this.uploading = true
+      console.log(this.uploading)
+      var form = this.$refs.uploadForm
+      var formData = new FormData(form)
+      // console.log(formData)
+      const res = await fetch('/upload', {
+        method: 'POST',
+        body: formData
+      })
+      const results = await res.json()
+      this.uploading = false
+      console.log(this.uploading)
+      this.$refs.fileSelect.value = null
+      this.$emit('newFile', results)
+    }
+  }
 }
 </script>
 

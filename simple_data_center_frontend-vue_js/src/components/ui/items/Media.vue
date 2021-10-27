@@ -5,25 +5,23 @@
         <label class="dot text-truncate" v-if="type!='upload'">.</label>
         <label class="media-name text-truncate" v-if="type!='upload'">{{name}}</label>
     </div>
-    <UploadIcon v-if="type=='upload'" class="upload-icon position-absolute top-50 start-50 translate-middle" />
-    <AudioPlayer v-if="type=='audio'" :url="url" />
+    <!-- <UploadIcon v-if="type=='upload'" class="upload-icon position-absolute top-50 start-50 translate-middle" /> -->
+    <MediaPlayer v-if="type=='audio'||type=='video'" :type='this.type' :url="url" />
     <div class="trash-icon-holder position-absolute top-50 start-50 translate-middle"><TrashIcon v-if="showCleanBtn.media && type!='upload'" class="delete-icon" /></div>
 </div>
 </template>
 
 <script>
 import { mapState } from "vuex"
-import { AudioPlayer } from './AudioPlayer.vue'
+import MediaPlayer from './MediaPlayer.vue'
 export default {
     data(){
         return{
             backgroundProperties: {
-                background: "#555555",
                 backgroundPosition: 'center',
                 backgroundSize: 'cover'
             },
-            mediaNumber: "",
-            urlForDisplay: ""
+            mediaNumber: ""
         }
     },
     props:{
@@ -33,18 +31,31 @@ export default {
         url: String
     },
     components:{
-        AudioPlayer
+        MediaPlayer
     },
     methods:{
         showMedia(){
-            console.log(this.name)
-            console.log(this.url)
-            console.log(this.backgroundProperties)
+            // console.log(this.name)
+            // console.log(this.url)
+            // console.log(this.backgroundProperties)
         },
         fixedEncodeURIComponent(str) {
             return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
                 return '%' + c.charCodeAt(0).toString(16)
             })
+        },
+        setBackground(){
+            if(this.type == "image"){
+                this.backgroundProperties.backgroundImage = `url(${this.fixedEncodeURIComponent(this.url)})`
+            }
+            else if(this.type == "video"){
+                this.backgroundProperties.background = "#000000"
+                this.backgroundProperties.border = "2px solid " + this.colors.secondary
+            }
+            else if(this.type == "audio"){
+                this.backgroundProperties.background = this.colors.background
+                this.backgroundProperties.border = "2px solid " + this.colors.secondary
+            }
         },
         async deleteMedia(){
             const res = await fetch('/file/' + this.name, {
@@ -56,12 +67,12 @@ export default {
         }
     },
     computed:{
-        ...mapState(["showCleanBtn", "showCleanBtn", "darkMode"])
+        ...mapState(["colors", "showCleanBtn", "showCleanBtn", "darkMode"])
     },
     watch:{
-        url(){
-            if(this.type == "image"){
-                this.backgroundProperties.backgroundImage = `url(${this.fixedEncodeURIComponent(this.url)})`
+        colors(){
+            if(this.type != "audio"){
+                this.setBackground()
             }
         }
     },
@@ -70,10 +81,7 @@ export default {
             this.mediaNumber = "Upload"
         }
         else{
-            this.urlForDisplay = this.fixedEncodeURIComponent(this.url)
-            if(this.type == "image"){
-                this.backgroundProperties.backgroundImage = `url(${this.urlForDisplay})`
-            }
+            this.setBackground()
             this.mediaNumber = this.index+1
         }   
     }
@@ -82,10 +90,12 @@ export default {
 
 <style scoped>
 .media-holder{
-    min-height: 200px;
-    max-height: 200px;
-    min-width: 200px;
-    max-width: 200px;
+    /* min-height: 100%;
+    max-height: 100%;
+    min-width: 100%;
+    max-width: 100%; */
+    height: 100%;
+    width: 100%;
     border-radius: 5px;
     cursor: pointer;
 }

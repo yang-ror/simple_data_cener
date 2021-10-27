@@ -5,7 +5,7 @@
     <input v-if="editingMode" @keyup.enter="submitEditing" v-model="linkTitle" :style="{color: colors.text, background: colors.background}" class="rename-input">
     <div v-if="!editingMode && !showCleanBtn.links" class="link-btn-group" :style="{color: colors.primary}">
         <div class="link-btn-holder" @click="startEditing"><RenameIcon class="link-btn" /></div>
-        <div class="link-btn-holder" @click="copyToClipBoard(url)"><CopyIcon class="link-btn" /></div>
+        <!-- <div class="link-btn-holder" @click="copyToClipBoard(url)"><CopyIcon class="link-btn" /></div> -->
     </div>
     <div v-if="editingMode" class="link-btn-group" :style="{color: colors.primary}">
         <div class="link-btn-holder" @click="submitEditing"><SubmitIcon class="link-btn" /></div>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex"
+import { mapState } from "vuex"
 export default {
     data(){
         return{
@@ -37,7 +37,7 @@ export default {
         url: String
     },
     methods:{
-        ...mapMutations(["copyToClipBoard"]),
+        // ...mapMutations(["copyToClipBoard"]),
         startEditing(){
             this.linkTitle = this.title
             this.editingMode = true

@@ -149,8 +149,14 @@ export default {
     fileListUpdate(){
       this.readFileList()
       this.mediasToDisplay = this.medias
-      this.setPage()
+
+      this.mediasInCurrentPage = []
       this.$forceUpdate()
+
+      setTimeout(()=>{
+        this.setPage()
+        this.$forceUpdate()
+      },0)
     }
   }
 }
@@ -158,8 +164,10 @@ export default {
 
 <style scoped>
 .col{
-  min-width: 215px;
-  max-width: 215px;
+  min-width: 330px;
+  max-width: 330px;
+  /* width: 330px; */
+  height: 220px;
   margin-bottom: 15px;
 }
 </style>

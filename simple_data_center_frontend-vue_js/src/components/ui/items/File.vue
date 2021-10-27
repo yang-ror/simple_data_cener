@@ -6,7 +6,7 @@
     <div v-if="!editingMode && !showCleanBtn.files" class="file-btn-group" :style="{color: colors.primary}">
         <!-- <div class="file-btn-holder"><ShowInMediaIcon class="file-btn" /></div> -->
         <div class="file-btn-holder" @click="startEditing"><RenameIcon class="file-btn" /></div>
-        <div class="file-btn-holder" @click="copyToClipBoard(url)"><CopyIcon class="file-btn" /></div>
+        <!-- <div class="file-btn-holder" @click="copyToClipBoard(url)"><CopyIcon class="file-btn" /></div> -->
     </div>
     <div v-if="editingMode" class="file-btn-group" :style="{color: colors.primary}">
         <div class="file-btn-holder" @click="submitEditing"><SubmitIcon class="file-btn" /></div>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex"
+import { mapState } from "vuex"
 export default {
     data(){
         return{
@@ -36,7 +36,6 @@ export default {
         url: String
     },
     methods:{
-        ...mapMutations(["copyToClipBoard"]),
         startEditing(){
             this.filename = this.name
             this.editingMode = true
