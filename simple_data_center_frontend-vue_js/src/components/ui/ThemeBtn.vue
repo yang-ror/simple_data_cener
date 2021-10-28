@@ -7,8 +7,16 @@
 
 <script>
 import { mapState, mapMutations } from "vuex"
+import {
+    BIconMoonStarsFill as DarkModeIcon,
+    BIconSunFill as LightModeIcon
+} from 'bootstrap-icons-vue';
 export default {
     name: 'ThemeBtn',
+    components:{
+        DarkModeIcon,
+        LightModeIcon
+    },
     methods: {
         ...mapMutations(["setLightMode", "setDarkMode"]),
         switchTheme(){

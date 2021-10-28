@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { BIconTrash as TrashIcon } from 'bootstrap-icons-vue'
 import { mapState } from "vuex"
 import MediaPlayer from './MediaPlayer.vue'
 export default {
@@ -31,6 +32,7 @@ export default {
         url: String
     },
     components:{
+        TrashIcon,
         MediaPlayer
     },
     methods:{
@@ -90,10 +92,6 @@ export default {
 
 <style scoped>
 .media-holder{
-    /* min-height: 100%;
-    max-height: 100%;
-    min-width: 100%;
-    max-width: 100%; */
     height: 100%;
     width: 100%;
     border-radius: 5px;

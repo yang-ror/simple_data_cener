@@ -11,13 +11,16 @@
 
 <script>
 import { mapState, mapMutations } from "vuex"
-
+import { BIconSearch as SearchIcon} from 'bootstrap-icons-vue';
 export default {
     data(){
         return{
             searchByKeyWord: "",
             filterEnabled: false
         }
+    },
+    components:{
+        SearchIcon
     },
     computed:{
         ...mapState(["colors"])

@@ -3,16 +3,12 @@
     <input class="form-check-input" type="checkbox" v-model="isCompleted" @click="toogleComplete">
     <label class="todo-index">{{index}}.</label>
     <label v-if="!editingMode" :class="isCompleted ? 'completed-todo' : ''" :style="{color: colors.primary, textDecorationColor: colors.secondary}" class="todo-label">{{title}}</label>
-    <input v-if="editingMode" @keyup.enter="submitEditing" v-model="todoTitle" :style="{color: colors.text, background: colors.background}" class="todo-input">
-    <div v-if="!editingMode && !showCleanBtn.todo" class="todo-btn-group" :style="{color: colors.primary}">
-        <div class="todo-btn-holder" @click="startEditing"><RenameIcon class="todo-btn" /></div>
-    </div>
-    <div v-if="editingMode" class="todo-btn-group" :style="{color: colors.primary}">
-        <div class="todo-btn-holder" @click="submitEditing"><SubmitIcon class="todo-btn" /></div>
-        <div class="todo-btn-holder" @click="cancelEditing"><CancelIcon class="todo-btn" /></div>
-    </div>
-    <div v-if="showCleanBtn.todo" class="todo-btn-group" :style="{color: 'white'}">
-        <div class="todo-btn-holder bg-danger bg-gradient" @click="deleteTodo"><DeleteIcon class="todo-btn" /></div>
+    <input v-if="editingMode" @keyup.enter="submitEditing" @keyup.esc="cancelEditing" v-model="todoTitle" :style="{color: colors.text, background: colors.background}" class="todo-input">
+    <div class="todo-btn-group" :style="{color: showCleanBtn.todo ? 'white' : colors.primary}">
+        <IconBtn action="edit" @click="startEditing" :alert='false' v-if="!editingMode && !showCleanBtn.todo" />
+        <IconBtn action="submit" @click="submitEditing" :alert='false' v-if="editingMode" />
+        <IconBtn action="cancel" @click="cancelEditing" :alert='false' v-if="editingMode" />
+        <IconBtn action="delete" @click="deleteTodo" :alert='true' v-if="showCleanBtn.todo" />
     </div>
 </div>
 
@@ -20,6 +16,7 @@
 
 <script>
 import { mapMutations, mapState } from "vuex"
+import IconBtn from '../IconBtn.vue'
 export default {
     data(){
         return{
@@ -28,14 +25,17 @@ export default {
             editingMode: false
         }
     },
-    computed:{
-        ...mapState(["showCleanBtn", "colors"])
-    },
     props:{
         index: Number,
         id: String,
         title: String,
         completed: Boolean
+    },
+    components:{
+        IconBtn
+    },
+    computed:{
+        ...mapState(["showCleanBtn", "colors"])
     },
     methods:{
         ...mapMutations(["copyToClipBoard"]),
@@ -81,7 +81,6 @@ export default {
             })
             const results = await res.json()
             if(res.ok){
-                // this.isCompleted = !this.completed
                 this.$emit('editTodo', results)
             }
         },
@@ -109,24 +108,6 @@ export default {
 }
 .todo-btn-group{
     float: right;
-}
-.todo-btn-holder{
-    display: inline-block;
-    margin-left: 10px;
-    border-radius: 50%;
-    background-color: rgba(133, 133, 133, 0.2);
-    cursor: pointer;
-}
-.todo-btn{
-    margin-left: 4px;
-    margin-right: 4px;
-    margin-bottom: 3px;
-}
-.todo-btn-holder:hover{
-    background-color: rgba(163, 163, 163, 0.5);
-}
-.todo-btn-holder:active{
-    background-color: rgba(163, 163, 163, 0.3);
 }
 .todo-index{
     margin-left: 10px;

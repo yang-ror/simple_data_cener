@@ -2,23 +2,18 @@
 <div class="file-holder">
     <label class="file-index">{{index+1}}.</label>
     <div v-if="!editingMode" class="file-label" :style="{color: colors.primary}"><a :href="url" target='_blank' class="file-a" :style="{color: colors.primary}">{{name}}</a></div>
-    <input v-if="editingMode" @keyup.enter="submitEditing" v-model="filename" :style="{color: colors.text, background: colors.background}" class="filename-input">
-    <div v-if="!editingMode && !showCleanBtn.files" class="file-btn-group" :style="{color: colors.primary}">
-        <!-- <div class="file-btn-holder"><ShowInMediaIcon class="file-btn" /></div> -->
-        <div class="file-btn-holder" @click="startEditing"><RenameIcon class="file-btn" /></div>
-        <!-- <div class="file-btn-holder" @click="copyToClipBoard(url)"><CopyIcon class="file-btn" /></div> -->
-    </div>
-    <div v-if="editingMode" class="file-btn-group" :style="{color: colors.primary}">
-        <div class="file-btn-holder" @click="submitEditing"><SubmitIcon class="file-btn" /></div>
-        <div class="file-btn-holder" @click="cancelEditing"><CancelIcon class="file-btn" /></div>
-    </div>
-    <div v-if="showCleanBtn.files" class="file-btn-group" :style="{color: 'white'}">
-        <div class="file-btn-holder bg-danger bg-gradient" @click="deleteFile"><DeleteIcon class="file-btn" /></div>
+    <input v-if="editingMode" @keyup.enter="submitEditing" @keyup.esc="cancelEditing" v-model="filename" :style="{color: colors.text, background: colors.background}" class="filename-input">
+    <div class="file-btn-group" :style="{color: showCleanBtn.files ? 'white' : colors.primary}">
+        <IconBtn action="edit" @click="startEditing" :alert='false' v-if="!editingMode && !showCleanBtn.files" />
+        <IconBtn action="submit" @click="submitEditing" :alert='false' v-if="editingMode" />
+        <IconBtn action="cancel" @click="cancelEditing" :alert='false' v-if="editingMode" />
+        <IconBtn action="delete" @click="deleteFile" :alert='true' v-if="showCleanBtn.files" />
     </div>
 </div>
 </template>
 
 <script>
+import IconBtn from '../IconBtn.vue'
 import { mapState } from "vuex"
 export default {
     data(){
@@ -27,13 +22,16 @@ export default {
             editingMode: false
         }
     },
-    computed:{
-        ...mapState(["showCleanBtn", "colors"])
-    },
     props:{
         index: Number,
         name: String,
         url: String
+    },
+    components:{
+        IconBtn
+    },
+    computed:{
+        ...mapState(["showCleanBtn", "colors"])
     },
     methods:{
         startEditing(){
@@ -92,24 +90,6 @@ export default {
 }
 .file-btn-group{
     float: right;
-}
-.file-btn-holder{
-    display: inline-block;
-    margin-left: 10px;
-    border-radius: 50%;
-    background-color: rgba(133, 133, 133, 0.2);
-    cursor: pointer;
-}
-.file-btn{
-    margin-left: 4px;
-    margin-right: 4px;
-    margin-bottom: 3px;
-}
-.file-btn-holder:hover{
-    background-color: rgba(163, 163, 163, 0.5);
-}
-.file-btn-holder:active{
-    background-color: rgba(163, 163, 163, 0.3);
 }
 .filename-input{
     border-color: #42b883;

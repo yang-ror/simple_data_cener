@@ -7,6 +7,7 @@
 
 <script>
 import { mapState, mapMutations } from "vuex"
+import { BIconTrash as TrashIcon } from 'bootstrap-icons-vue';
 export default {
     data(){
         return{
@@ -15,6 +16,9 @@ export default {
     },
     props:{
         type: String,
+    },
+    components:{
+        TrashIcon
     },
     methods:{
         ...mapMutations(["toogleClean"]),

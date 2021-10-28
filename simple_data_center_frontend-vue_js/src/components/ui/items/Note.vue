@@ -2,32 +2,24 @@
 <div class="card text-white mb-3" :class="darkMode ? 'bg-dark' : 'bg-light'">
     <div class="card-header" :style="{color: colors.text}">
         {{noteNumber}}. <label class="note-date" v-if="id!=0" :style="{color: colors.primary}">{{noteDate}}</label>
-        <div v-if="!editingMode && !showCleanBtn.notes" class="note-btn-group" :style="{color: colors.primary}">
-            <div class="note-btn-holder" @click="startEditing"><EditIcon class="note-btn" /></div>
-            <!-- <div class="note-btn-holder"><ViewInBoxIcon class="note-btn" /></div> -->
-            <!-- <div class="note-btn-holder" @click="copyContentToClipBoard"><CopyIcon class="note-btn" /></div> -->
-        </div>
-        <div v-if="editingMode" class="note-btn-group" :style="{color: colors.primary}">
-            
-            <div v-if="id==0" class="note-btn-holder" @click="submitEditing"><NewNoteIcon class="note-btn" /></div>
-            <div v-if="id!=0" class="note-btn-holder" @click="submitEditing"><SubmitIcon class="note-btn" /></div>
-            <!-- <div class="note-btn-holder" @click="toggleNoteBox"><ViewInBoxIcon class="note-btn" /></div> -->
-            <div v-if="id!=0" class="note-btn-holder" @click="cancelEditing"><CancelIcon class="note-btn" /></div>
-        </div>
-        <div v-if="showCleanBtn.notes && noteNumber!='New note'" class="note-btn-group" :style="{color: 'white'}">
-            <div class="note-btn-holder bg-danger bg-gradient" @click="deleteNote"><DeleteIcon class="note-btn" /></div>
+        <div class="note-btn-group" :style="{color: showCleanBtn.notes ? 'white' : colors.primary}">
+            <IconBtn action="edit" @click="startEditing" :alert='false' v-if="!editingMode && !showCleanBtn.notes" />
+            <IconBtn :action="id==0 ? 'new-note' : 'submit'" @click="submitEditing" :alert='false' v-if="editingMode" />
+            <IconBtn action="cancel" @click="cancelEditing" :alert='false' v-if="editingMode && id!=0" />
+            <IconBtn action="delete" @click="deleteNote" :alert='true' v-if="showCleanBtn.notes" />
         </div>
     </div>
     <div class="card-body" :style="{color: colors.text}">
         <pre v-if="!editingMode" class="card-text">{{content}}</pre>
-        <textarea v-if="editingMode" v-model="noteContent" class="editingArea" 
-        :style="{color: colors.text, background: colors.background}">
+        <textarea v-if="editingMode" @keyup.esc="cancelEditing" v-model="noteContent" class="editingArea" 
+            :style="{color: colors.text, background: colors.background}">
         </textarea>
     </div>
 </div>
 </template>
 
 <script>
+import IconBtn from '../IconBtn.vue'
 import { mapMutations, mapState } from "vuex"
 export default {
     data(){
@@ -43,6 +35,9 @@ export default {
         id: String,
         content: String,
         date: Date
+    },
+    components:{
+        IconBtn
     },
     computed:{
         ...mapState(["showCleanBtn", "showNoteBox", "darkMode", "colors"]),
@@ -94,9 +89,6 @@ export default {
         cancelEditing(){
             this.editingMode = false
         },
-        // copyContentToClipBoard(){
-            
-        // },
         async deleteNote(){
             const res = await fetch('/note/' + this.id, {
                 method: 'DELETE'
@@ -133,24 +125,6 @@ export default {
     .note-btn-group{
         float: right;
     }
-    .note-btn-holder{
-        display: inline-block;
-        margin-left: 10px;
-        border-radius: 50%;
-        background-color: rgba(133, 133, 133, 0.2);
-        cursor: pointer;
-    }
-    .note-btn-holder:hover{
-        background-color: rgba(163, 163, 163, 0.5);
-    }
-    .note-btn-holder:active{
-        background-color: rgba(163, 163, 163, 0.3);
-    }
-    .note-btn{
-        margin-left: 4px;
-        margin-right: 4px;
-        margin-bottom: 3px;
-    }
     .card-body{
         overflow: hide;
     }
@@ -163,7 +137,7 @@ export default {
         resize: none;
         height: 11.5em;
         width: 100%;
-        font-size: 0.9em;
+        font-size: 0.85em;
     }
 
     ::-webkit-scrollbar {

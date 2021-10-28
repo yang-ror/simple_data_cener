@@ -2,23 +2,18 @@
 <div class="link-holder">
     <label class="link-index">{{index+1}}.</label>
     <div v-if="!editingMode" class="link-label" :style="{color: colors.primary}"><a :href="url" target='_blank' class="link-a" :style="{color: colors.primary}">{{title}}</a></div>
-    <input v-if="editingMode" @keyup.enter="submitEditing" v-model="linkTitle" :style="{color: colors.text, background: colors.background}" class="rename-input">
-    <div v-if="!editingMode && !showCleanBtn.links" class="link-btn-group" :style="{color: colors.primary}">
-        <div class="link-btn-holder" @click="startEditing"><RenameIcon class="link-btn" /></div>
-        <!-- <div class="link-btn-holder" @click="copyToClipBoard(url)"><CopyIcon class="link-btn" /></div> -->
-    </div>
-    <div v-if="editingMode" class="link-btn-group" :style="{color: colors.primary}">
-        <div class="link-btn-holder" @click="submitEditing"><SubmitIcon class="link-btn" /></div>
-        <div class="link-btn-holder" @click="cancelEditing"><CancelIcon class="link-btn" /></div>
-    </div>
-    <div v-if="showCleanBtn.links" class="link-btn-group" :style="{color: 'white'}">
-        <div class="link-btn-holder bg-danger bg-gradient" @click="deleteLink"><DeleteIcon class="link-btn" /></div>
+    <input v-if="editingMode" @keyup.enter="submitEditing" @keyup.esc="cancelEditing" v-model="linkTitle" :style="{color: colors.text, background: colors.background}" class="rename-input">
+    <div class="link-btn-group" :style="{color: showCleanBtn.links ? 'white' : colors.primary}">
+        <IconBtn action="edit" @click="startEditing" :alert='false' v-if="!editingMode && !showCleanBtn.links" />
+        <IconBtn action="submit" @click="submitEditing" :alert='false' v-if="editingMode" />
+        <IconBtn action="cancel" @click="cancelEditing" :alert='false' v-if="editingMode" />
+        <IconBtn action="delete" @click="deleteLink" :alert='true' v-if="showCleanBtn.links" />
     </div>
 </div>
-
 </template>
 
 <script>
+import IconBtn from '../IconBtn.vue'
 import { mapState } from "vuex"
 export default {
     data(){
@@ -27,14 +22,17 @@ export default {
             editingMode: false
         }
     },
-    computed:{
-        ...mapState(["showCleanBtn", "colors"])
-    },
     props:{
         index: Number,
         id: String,
         title: String,
         url: String
+    },
+    components:{
+        IconBtn
+    },
+    computed:{
+        ...mapState(["showCleanBtn", "colors"])
     },
     methods:{
         // ...mapMutations(["copyToClipBoard"]),
@@ -95,24 +93,6 @@ export default {
 }
 .link-btn-group{
     float: right;
-}
-.link-btn-holder{
-    display: inline-block;
-    margin-left: 10px;
-    border-radius: 50%;
-    background-color: rgba(133, 133, 133, 0.2);
-    cursor: pointer;
-}
-.link-btn{
-    margin-left: 4px;
-    margin-right: 4px;
-    margin-bottom: 3px;
-}
-.link-btn-holder:hover{
-    background-color: rgba(163, 163, 163, 0.5);
-}
-.link-btn-holder:active{
-    background-color: rgba(163, 163, 163, 0.3);
 }
 .rename-input{
     border-color: #42b883;

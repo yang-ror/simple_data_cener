@@ -19,6 +19,13 @@
 </template>
 
 <script>
+import { 
+  BIconBookmarkCheckFill as TodoIcon, 
+  BIconFolderFill as FolderIcon, 
+  BIconImages as MediaIcon, 
+  BIconLink45deg as LinkIcon, 
+  BIconStickiesFill as NoteIcon
+  } from 'bootstrap-icons-vue';
 import { mapState } from "vuex"
 import CleanBtn from "../ui/CleanBtn.vue"
 import TodoHolder from "./placeholder/TodoHolder.vue"
@@ -32,15 +39,21 @@ export default {
         title: String
     },
     components:{
-        CleanBtn,
-        TodoHolder,
-        FilesHolder,
-        MediaHolder,
-        LinksHolder,
-        NotesHolder,
+      TodoIcon, 
+      FolderIcon, 
+      MediaIcon, 
+      LinkIcon, 
+      NoteIcon,
+
+      CleanBtn,
+      TodoHolder,
+      FilesHolder,
+      MediaHolder,
+      LinksHolder,
+      NotesHolder
     },
     computed:{
-        ...mapState(["showCleanBtn","colors"])
+      ...mapState(["showCleanBtn","colors"])
     }
 }
 </script>

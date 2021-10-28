@@ -10,10 +10,19 @@
 
 <script>
 import { mapState } from "vuex"
+import {
+    BIconCaretLeftFill as LeftPageIcon,
+    BIconCaretRightFill as RightPageIcon
+} from 'bootstrap-icons-vue';
+
 export default {
     props:{
         numOfPages: Number,
         currentPage: Number
+    },
+    components:{
+        LeftPageIcon,
+        RightPageIcon
     },
     computed:{
         ...mapState(["colors"])
