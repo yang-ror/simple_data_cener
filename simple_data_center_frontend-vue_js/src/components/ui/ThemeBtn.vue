@@ -7,6 +7,7 @@
 
 <script>
 import { mapState, mapMutations } from "vuex"
+import { VueCookieNext } from 'vue-cookie-next'
 import {
     BIconMoonStarsFill as DarkModeIcon,
     BIconSunFill as LightModeIcon
@@ -20,7 +21,15 @@ export default {
     methods: {
         ...mapMutations(["setLightMode", "setDarkMode"]),
         switchTheme(){
-            this.darkMode ? this.setLightMode() : this.setDarkMode()
+            if(this.darkMode){
+                this.setLightMode()
+                VueCookieNext.setCookie('theme', 'light')
+            }
+            else{
+                this.setDarkMode()
+                VueCookieNext.setCookie('theme', 'dark')
+            }
+            
         }
     },
     computed:{

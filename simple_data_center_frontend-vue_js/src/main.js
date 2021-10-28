@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import { VueCookieNext } from 'vue-cookie-next'
 
 import 'bootstrap'
 import 'animate.css'
@@ -8,6 +9,7 @@ import App from './App.vue'
 
 const app = createApp(App)
 
+app.use(VueCookieNext)
 app.use(store)
 
 app.mount('#app')

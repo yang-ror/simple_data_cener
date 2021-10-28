@@ -1,3 +1,5 @@
+import { VueCookieNext } from 'vue-cookie-next'
+
 export default {
     setDarkMode(state){
         state.colors = {
@@ -34,12 +36,18 @@ export default {
                 }
             }
             newArr.splice(0, 0, payload)
+            
             state.panels = newArr
+            VueCookieNext.setCookie('panel', newArr.join('-'))
+            
         }
     },
-    toggleNoteBox(state){
-        state.showNoteBox = !state.showNoteBox
+    setPanelOrder(state, payload){
+        state.panels = payload
     },
+    // toggleNoteBox(state){
+    //     state.showNoteBox = !state.showNoteBox
+    // },
     applyFilter(state, payload){
         state.itemFilter = payload
     },

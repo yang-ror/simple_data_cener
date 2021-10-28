@@ -116,6 +116,7 @@ export default {
 }
 .todo-label{
     width: 70%;
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
