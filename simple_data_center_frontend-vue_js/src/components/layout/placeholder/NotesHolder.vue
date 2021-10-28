@@ -113,5 +113,6 @@ export default {
 .col{
   min-width: 330px;
   max-width: 330px;
+  margin-bottom: 8px;
 }
 </style>

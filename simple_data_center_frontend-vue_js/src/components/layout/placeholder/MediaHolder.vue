@@ -1,10 +1,8 @@
 <template>
   <div ref="thisPanel" :style="(currentPage!=1&&currentPage==numberOfPages)? `height:${panelHeight}px` : ''">
-    <div class="row">
-      <!-- <div class="col">
-        <Media type="upload" />
-      </div> -->
-      <div v-for="media in mediasInCurrentPage" :key="media.fileIndex" class="col">
+    <div class="media-card-container">
+      <!-- <div><Media type="upload" /></div> -->
+      <div v-for="media in mediasInCurrentPage" :key="media.fileIndex" class="media-card">
         <Media v-if="!media.hide" :index="media.fileIndex" @deleteThisFile="deleteFile" :name="media.name" :type="media.type" :url="media.path" />
       </div>
     </div>
@@ -163,11 +161,25 @@ export default {
 </script>
 
 <style scoped>
-.col{
-  min-width: 330px;
-  max-width: 330px;
-  /* width: 330px; */
-  height: 220px;
-  margin-bottom: 15px;
+.media-card-container{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.media-card-container::after {
+  width: 50%;
+  height: 0;
+  content: "";
+  /* flex: auto; */
+}
+.media-card{
+  /* min-width: 330px;
+  max-width: 330px; */
+  width: 320px;
+  height: 240px;
+  margin-left: 1px;
+  margin-right: 1px;
+  margin-bottom: 35px;
 }
 </style>

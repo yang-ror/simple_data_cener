@@ -1,7 +1,8 @@
 <template>
 <div class="card text-white mb-3" :class="darkMode ? 'bg-dark' : 'bg-light'">
     <div class="card-header" :style="{color: colors.text}">
-        {{noteNumber}}. <label class="note-date" v-if="id!=0" :style="{color: colors.primary}">{{noteDate}}</label>
+        {{noteNumber}}. <label class="note-date position-absolute start-50 translate-middle" v-if="id!=0" 
+        :style="{color: colors.primary}">{{noteDate}}</label>
         <div class="note-btn-group" :style="{color: showCleanBtn.notes ? 'white' : colors.primary}">
             <IconBtn action="edit" @click="startEditing" :alert='false' v-if="!editingMode && !showCleanBtn.notes" />
             <IconBtn :action="id==0 ? 'new-note' : 'submit'" @click="submitEditing" :alert='false' v-if="editingMode" />
@@ -119,8 +120,8 @@ export default {
         display: inline-block;
     }
     .note-date{
-        margin-left: 15px;
         font-size: 0.8em;
+        top: 21px;
     }
     .note-btn-group{
         float: right;
@@ -129,13 +130,12 @@ export default {
         overflow: hide;
     }
     .card-text{
-        height: 11.5em;
-        /* overflow: auto; */
+        height: 12em;
     }
     .editingArea{
         border: none;
         resize: none;
-        height: 11.5em;
+        height: 12em;
         width: 100%;
         font-size: 0.85em;
     }
