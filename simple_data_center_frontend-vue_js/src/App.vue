@@ -30,12 +30,12 @@ export default {
     if(this.$cookie.getCookie('theme') == 'light'){
       this.setLightMode()
     }
-    if(this.$cookie.getCookie('panel') != ''){
+    document.querySelector('body').setAttribute('style', `background:${this.colors.background}`)
+    if(this.$cookie.getCookie('panel') != null){
       let panelArray = this.$cookie.getCookie('panel').split('-')
       if(panelArray.includes('Todo') && panelArray.includes('Files') && panelArray.includes('Media') 
       && panelArray.includes('Links') && panelArray.includes('Notes')) this.setPanelOrder(panelArray)
     }
-    document.querySelector('body').setAttribute('style', `background:${this.colors.background}`)
   }
 }
 </script>
@@ -46,6 +46,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-width: 371px;
+  margin-top: 30px;
   margin-bottom: 30px;
 }
 .panel{

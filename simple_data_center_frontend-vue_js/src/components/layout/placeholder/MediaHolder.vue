@@ -171,11 +171,8 @@ export default {
   width: 50%;
   height: 0;
   content: "";
-  /* flex: auto; */
 }
 .media-card{
-  /* min-width: 330px;
-  max-width: 330px; */
   width: 320px;
   height: 240px;
   margin-left: 1px;
